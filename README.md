@@ -49,7 +49,7 @@ training data using magnitude and phase
 model summary:same as Lenet1
 ![](https://i.imgur.com/JHNvt4g.png =50%x50%)
 **Lenet3:**
-spectrogram using turkey window and overlapping 50%
+spectrogram using turkey window and noverlap = 16 
 training data using magnitude
 model summary: same as Lenet1
 ![](https://i.imgur.com/Nia8fDF.png =70%x70%)
