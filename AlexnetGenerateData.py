@@ -6,6 +6,8 @@ import threading
 AlexnetdataPhase = []
 AlexnetdataMag = []
 AlexnetdataY=[]
+
+dir_str = input("input directory(train,val,test):")
 def Pspec2_224(Phase_path):
     Pfig = cv2.imread(Phase_path)
     resized_image = cv2.resize(Pfig, (224, 224))
@@ -24,16 +26,16 @@ def job(i):
     for files in os.listdir(_dir):
         index = re.search(r'\d+', files).group()
         print(index)
-        Phase_path = "./"+dir_str+"Spectrogram"+str(which_label)+"/Pspectrogram"+index+".png"
+        Phase_path = "./"+dir_str+"Spectrogram"+str(i)+"/Pspectrogram"+index+".png"
         p = Pspec2_224(Phase_path)
-        Mag_path = "./"+dir_str+"Spectrogram"+str(which_label)+"/Mspectrogram"+index+".png"
+        Mag_path = "./"+dir_str+"Spectrogram"+str(i)+"/Mspectrogram"+index+".png"
         m = Mspec2_224(Mag_path)
         with lock:
             AlexnetdataPhase.append(p)
             AlexnetdataMag.append(m)
             AlexnetdataY.append([float(i==j) for j in range(20)])
 
-dir_str = input("input directory(train,val,test):")
+
 if(dir_str!="train" and dir_str!="val" and dir_str!="test"):
     print("invalid directory")
     exit(1)

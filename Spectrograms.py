@@ -5,6 +5,7 @@ import os
 import re
 import threading
 import cv2
+thread_n = 20
 def draw_phase_spectrogram(signal,Phase_path):
     #Phase
     Pfreq,Ptime,PS = spectrogram(signal, fs=1.0, window=('hanning'), nperseg=None, noverlap=None, nfft=256, detrend='constant', return_onesided=True, scaling='density', axis=-1, mode='phase')
@@ -75,7 +76,7 @@ dir_str = input("input directory(train,val,test):")
 if(dir_str!="train" and dir_str!="val" and dir_str!="test"):
     print("invalid directory")
     exit(1)
-if(tdir =="train" or tdir == "val"):
+if(dir_str =="train" or dir_str == "val"):
     tdir.append("./"+dir_str+"/Tettigonioidea1/")
     tdir.append("./"+dir_str+"/Tettigonioidea2/")
     tdir.append("./"+dir_str+"/drums_Snare/")
@@ -100,12 +101,14 @@ if(tdir =="train" or tdir == "val"):
     for i in range(20):
         os.makedirs(dir_str+"Spectrogram"+str(i), exist_ok = True)
     threads = []
-    for i in range(20):
-      threads.append(threading.Thread(target = read_files , args = (tdir[i],i,)))
-      threads[i].start()
+    for i in range(thread_n):
+        global lock
+        lock = threading.Lock()
+        threads.append(threading.Thread(target = read_files , args = (tdir[i],i,)))
+        threads[i].start()
 
          
-    for i in range(20):
+    for i in range(thread_n):
       threads[i].join()
     print("Done")
 elif(dir_str == "test"):
